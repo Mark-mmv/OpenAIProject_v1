@@ -27,26 +27,18 @@ def main():
     assistant = AIAssistant(api_key=OPENAI_API_KEY)
 
     # История переписки — пустой список
-    messages: list[dict] = []
+    messages: list[dict] = [{"role": "assistant", "content": 'ВЫ два асистента ai. Начните обсуждать сколько бы мог стоить биткоин 1 января 2025 года'}]
 
-    print("Чат-бот запущен. Введите сообщение (или 'stopai' для выхода):")
 
     for idx in range(10):
-        user_input = input("You: ").strip()
-        if user_input.lower() == "stopai":
-            break
+        assistant1_reply = assistant.respond(messages)
+        messages.append({"role": "assistant", "content": assistant1_reply})
+        print("AI č1:", assistant1_reply)
 
-        # Добавляем сообщение пользователя в историю
-        messages.append({"role": "user", "content": user_input})
+        assistant2_reply = assistant.respond(messages)
+        messages.append({"role": "assistant", "content": assistant2_reply})
+        print("AI č2 :", assistant2_reply)
 
-        # Отправляем всю историю в OpenAI и получаем ответ
-        assistant_reply = assistant.respond(messages)
-
-        # Добавляем ответ ассистента в историю
-        messages.append({"role": "assistant", "content": assistant_reply})
-
-        # Печатаем ответ на экран
-        print("AI :", assistant_reply)
 
     # При выходе сохраняем всю историю в JSON-файл
     with open("transcription.json", "w", encoding="utf-8") as f:
